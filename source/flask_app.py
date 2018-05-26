@@ -40,7 +40,7 @@ def create_app():
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.register_blueprint(hyperOSPF)
     configure_database(app)
-    return app
+    return app, generator
 
 
 app = create_app()
