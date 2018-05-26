@@ -3,7 +3,6 @@ from collections import defaultdict
 class GraphGenerator:
     
     def is_neighbor(self, graph, *neighbors):
-        print(graph, neighbors)
         for n1, n2 in neighbors:
             graph[n1].append(n2)
             graph[n2].append(n1)

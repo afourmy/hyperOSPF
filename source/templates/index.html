@@ -20,21 +20,22 @@
       url: "/get_tree",
       success: function(tree){
         console.log(tree);
-        // Random tree
-        const N = 300;
-        const gData = {
-          nodes: [...Array(N).keys()].map(i => ({ id: i })),
-          links: [...Array(N).keys()]
-            .filter(id => id)
-            .map(id => ({
-              source: id,
-              target: Math.round(Math.random() * (id-1))
-            }))
-        };
-        
-    const Graph = ForceGraph3D()
-      (document.getElementById('3d-graph'))
-        .graphData(gData);
+        var nodes = []
+            links = [];
+        for (const [key, value] of Object.entries(tree)) {
+          console.log(key);
+          nodes.push({ id: key });
+          for (i = 0; i < value.length; i++) {
+            links.push({
+              source: key,
+              target: value[i] 
+            })
+          }
+        }
+
+        const Graph = ForceGraph3D()
+          (document.getElementById('3d-graph'))
+            .graphData({nodes: nodes, links: links});
       }
     })
 
