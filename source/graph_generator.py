@@ -11,98 +11,65 @@ class GraphGenerator:
         '''Generate a tree.'''
         graph = defaultdict(list)
         for i in range(2**n-1):
-            n1, n2, n3 = i, 2*i+1, 2*i+2
-            self.is_neighbor(graph, (n1, n2), (n1, n3))
+            self.is_neighbor(graph, (i, 2*i + 1), (i, 2*i + 2))
         return graph
 
     def star(self, n):
         '''Generate a star.'''
         graph = defaultdict(list)
         for i in range(n):
-            n1, n2 = n, n + 1 + i
-            self.is_neighbor(graph, (n1, n2))
+            self.is_neighbor(graph, (n, n + 1 + i))
         return graph
 
-    def full_mesh(self, n, subtype):
+    def full_mesh(self, n):
         '''Generate a full-mesh.'''
-        nb_node = self.cpt_node + 1
+        graph = defaultdict(list)
         for i in range(n):
             for j in range(i):
-                n1, n2 = str(nb_node+j), str(nb_node+i)
-                source = self.nf(name = n1, subtype = subtype)
-                destination = self.nf(name = n2, subtype = subtype)
-                yield source
-                yield destination
-                yield self.lf(source=source, destination=destination)
+                self.is_neighbor(graph, (n + j, n + i))
+        return graph
 
-    def ring(self, n, subtype):
+    def ring(self, n):
         '''Generate a ring'''
-        nb_node = self.cpt_node + 1
+        graph = defaultdict(list)
         for i in range(n):
-            n1, n2 = str(nb_node+i), str(nb_node+(1+i)%n)
-            source = self.nf(name = n1, subtype = subtype)
-            destination = self.nf(name = n2, subtype = subtype)
-            yield source
-            yield destination
-            yield self.lf(source=source, destination=destination)
+            self.is_neighbor(graph, (n + i, n + (1 + i)%n))
+        return graph
 
-    def square_tiling(self, n, subtype):
+    def square_tiling(self, n):
         '''Generate a square tiling'''
+        graph = defaultdict(list)
         for i in range(n**2):
-            n1, n2, n3 = str(i), str(i-1), str(i+n)
-            if i-1 > -1 and i%n:
-                source = self.nf(name = n1, subtype = subtype)
-                destination = self.nf(name = n2, subtype = subtype)
-                yield source
-                yield destination
-                yield self.lf(source=source, destination=destination)
-            if i+n < n**2:
-                source = self.nf(name = n1, subtype = subtype)
-                destination = self.nf(name = n3, subtype = subtype)
-                yield source
-                yield destination
-                yield self.lf(source=source, destination=destination)
+            if i - 1 > -1 and i % n:
+                self.is_neighbor(graph, (i, i - 1))
+            if i + n < n**2:
+                self.is_neighbor(graph, (i - 1, i + n))
+        return graph
 
     def hypercube(self, n, subtype):
         '''Generate a hypercube'''
+        graph = defaultdict(list)
         # we create a n-dim hypercube by connecting two (n-1)-dim hypercubes
         i = 0
-        graph_nodes = [self.nf(name=str(0), subtype=subtype)]
-        graph_plinks = []
+        nodes = [0]
+        links = []
         while i < n+1:
-            for k in range(len(graph_nodes)):
+            for k in range(len(nodes)):
                 # creation of the nodes of the second hypercube
-                graph_nodes.append(
-                                   self.nf(
-                                           name = str(k+2**i), 
-                                           subtype = subtype
-                                           )
-                                   )
-            for plink in graph_plinks[:]:
+                nodes.append(k + 2**i)
+            for source, destination in links[:]:
                 # connection of the two hypercubes
-                source, destination = plink.source, plink.destination
-                n1 = str(int(source.name) + 2**i)
-                n2 = str(int(destination.name) + 2**i)
-                graph_plinks.append(
-                                   self.lf(
-                                           source = self.nf(name = n1), 
-                                           destination = self.nf(name = n2)
-                                           )
-                                   )
+                links.append((source + 2**i, destination + 2**i))
             for k in range(len(graph_nodes)//2):
                 # creation of the physical links of the second hypercube
-                graph_plinks.append(
-                                   self.lf(
-                                           source = graph_nodes[k], 
-                                           destination = graph_nodes[k+2**i]
-                                           )
-                                   )
+                links.append((nodes[k], nodes[k + 2**i]))
             i += 1
-        yield from graph_nodes
-        yield from graph_plinks
+        self.is_neighbor(graph, *links)
+        return graph
 
     def kneser(self, n, k, subtype):
         '''Generate a Kneser graph'''
+        graph = defaultdict(list)
         # we keep track of what set we've seen to avoid having
         # duplicated edges in the graph, with the 'already_done' set
         already_done = set()
@@ -115,9 +82,11 @@ class GraphGenerator:
                     yield source
                     yield destination
                     yield self.lf(source=source, destination=destination)
+        return graph
 
     def petersen(self, n, k, subtype):
         '''Generate a Petersen graph'''
+        graph = defaultdict(list)
         # the petersen graph is made of the vertices (u_i) and (v_i) for 
         # i in [0, n-1] and the edges (u_i, u_i+1), (u_i, v_i) and (v_i, v_i+k).
         # to build it, we consider that v_i = u_(i+n).
@@ -140,3 +109,4 @@ class GraphGenerator:
             yield source
             yield destination
             yield self.lf(source=source, destination=destination)
+        return graph
