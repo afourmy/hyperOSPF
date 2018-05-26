@@ -28,7 +28,7 @@ def index():
 
 @hyperOSPF.route('/get_tree', methods=['POST'])
 def get_tree():
-    tree = generator.tree(5)
+    tree = generator.star(50)
     print(tree)
     return jsonify(tree)
 

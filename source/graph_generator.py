@@ -15,16 +15,13 @@ class GraphGenerator:
             self.is_neighbor(graph, (n1, n2), (n1, n3))
         return graph
 
-    def star(self, n, subtype):
+    def star(self, n):
         '''Generate a star.'''
-        nb_node = self.cpt_node + 1
+        graph = defaultdict(list)
         for i in range(n):
-            n1, n2 = str(nb_node), str(nb_node+1+i)
-            source = self.nf(name = n1, subtype = subtype)
-            destination = self.nf(name = n2, subtype = subtype)
-            yield source
-            yield destination
-            yield self.lf(source=source, destination=destination)
+            n1, n2 = n, n + 1 + i
+            self.is_neighbor(graph, (n1, n2))
+        return graph
 
     def full_mesh(self, n, subtype):
         '''Generate a full-mesh.'''

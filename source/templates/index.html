@@ -9,6 +9,7 @@
   <!-- Bootstrap -->
   <script src="{{ url_for('static', filename='bootstrap/bootstrap.min.js') }}"></script>
   <!-- 3D force graph -->
+  <script src="//unpkg.com/three"></script>
   <script src="//unpkg.com/3d-force-graph"></script>
   </head>
 <body>
@@ -19,11 +20,9 @@
       type: "POST",
       url: "/get_tree",
       success: function(tree){
-        console.log(tree);
         var nodes = []
             links = [];
         for (const [key, value] of Object.entries(tree)) {
-          console.log(key);
           nodes.push({ id: key });
           for (i = 0; i < value.length; i++) {
             links.push({
@@ -33,9 +32,17 @@
           }
         }
 
-        const Graph = ForceGraph3D()
-          (document.getElementById('3d-graph'))
-            .graphData({nodes: nodes, links: links});
+    const Graph = ForceGraph3D()
+      (document.getElementById('3d-graph'))
+        .nodeThreeObject(({ id }) => new THREE.Mesh(
+          new THREE.BoxGeometry(4, 4, 4),
+          new THREE.MeshPhongMaterial({
+            color: Math.round(Math.random() * Math.pow(2, 24)),
+            transparent: true,
+            opacity: 0.95
+          })
+        ))
+        .graphData({nodes: nodes, links: links});
       }
     })
 
