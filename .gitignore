@@ -1,0 +1,18 @@
+# byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# database & logs
+*.db
+*.log
+
+# venv
+env
+venv
+
+# latex
+*.gz
+
+# other
+.DS_Store
+

@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+  <title>SWAP: A Solver for the Wavelength Assignment Problem</title>
+  <!-- Bootstrap -->
+  <link href="{{ url_for('static', filename='bootstrap/bootstrap.min.css') }}" rel="stylesheet">
+  <!-- jQuery -->
+  <script src="{{ url_for('static', filename='jquery/jquery.min.js') }}"></script>
+  <!-- Bootstrap -->
+  <script src="{{ url_for('static', filename='bootstrap/bootstrap.min.js') }}"></script>
+  </head>
+  <div id="graph-transformation" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+          </button>
+          <h4 class="modal-title">Transformed graph</h4>
+        </div>
+        <div class="modal-body">
+          <div id="network" style="height:400px; width:100%;"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" onclick="wavelengthAssignment('largest_degree_first')">Largest degree first</button>
+          <button type="button" class="btn btn-default" onclick="wavelengthAssignment('linear_programming')">Linear programming</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <body>
+    <strong><p class="btn btn-danger score" style="min-width:100px; z-index:500; position: absolute; left:45vw; top:10px;" id="score">Result</p></strong>
+    <div class="panel-group" style="z-index:500; position: absolute; top: 20px; left:20px;">
+      <div class="panel panel-primary panel-transparent">
+        <div class="panel-heading" style="text-align: center;">SWAP</div>
+        <div class="panel-body">
+          <div class="btn-group-vertical btn-block" >
+            <button id="routing-button" type="button" class="btn btn-primary" onclick="routing()" style="width: 150px;">Routing</button>
+            <button id="wap-button" type="button" class="btn btn-primary" data-toggle='modal' data-target='#graph-transformation' style="width: 150px; display: none;">Transform graph</button>
+            <div class="btn-group">
+              <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Tile layer
+                <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu">
+                <li><a onclick="switch_layer('osm')"> Open Street Map </a></li>
+                <li><a onclick="switch_layer('gm')"> Google Maps </a></li>
+                <li><a onclick="switch_layer('nasa')"> NASA </a></li>
+              </ul>
+            </div> 
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="panel-group" style="z-index:500; position: absolute; top: 20px; right:20px;">
+      <form id="fileform" class="form-horizontal form-label-left" enctype="multipart/form-data" method="post" >
+        <div style="padding-bottom:5px;">
+          <label class="btn btn-default btn-file" style="width:100%;">Import a graph
+            <input id="file" name="file" style="visibility:hidden; display:none" type="file">
+          </label>
+        </div>
+      </form>
+    </div>
+    <div id="map">
+    <script>
+
+    </script>
+  </body>
+</html>
