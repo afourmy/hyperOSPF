@@ -1,7 +1,16 @@
-from collections import defaultdict
+from collections import defaultdict, OrderedDict
 from itertools import combinations
 
 class GraphGenerator:
+
+    algorithms = OrderedDict({
+        'tree': 'Tree',
+        'star': 'Star',
+        'full_mesh': 'Full mesh',
+        'ring': 'Ring',
+        'square_tiling': 'Square tiling',
+        'hypercube': 'Hypercube'
+    })
 
     def is_neighbor(self, graph, *neighbors):
         for n1, n2 in neighbors:
@@ -44,7 +53,7 @@ class GraphGenerator:
             if i - 1 > -1 and i % n:
                 self.is_neighbor(graph, (i, i - 1))
             if i + n < n**2:
-                self.is_neighbor(graph, (i - 1, i + n))
+                self.is_neighbor(graph, (i, i + n))
         return graph
 
     def hypercube(self, n):
@@ -68,7 +77,7 @@ class GraphGenerator:
         self.is_neighbor(graph, *links)
         return graph
 
-    def petersen(self, n, k):
+    def petersen(self, n, k=5):
         '''Generate a Petersen graph'''
         graph = defaultdict(list)
         # the petersen graph is made of the vertices (u_i) and (v_i) for 

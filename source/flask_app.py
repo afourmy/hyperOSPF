@@ -23,13 +23,12 @@ def allowed_file(name, allowed_extensions):
 
 @hyperOSPF.route('/', methods=['GET', 'POST'])
 def index():
-    return render_template('index.html')
+    return render_template('index.html', buttons=generator.algorithms)
 
 
-@hyperOSPF.route('/get_tree', methods=['POST'])
-def get_tree():
-    tree = generator.petersen(10, 5)
-    return jsonify(tree)
+@hyperOSPF.route('/generate/<algorithm>/<dimension>', methods=['POST'])
+def generate_graph(algorithm, dimension):
+    return jsonify(getattr(generator, algorithm)(int(dimension)))
 
 
 def configure_database(app):
