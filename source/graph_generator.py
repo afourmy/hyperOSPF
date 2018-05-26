@@ -1,22 +1,20 @@
-
-
+from collections import defaultdict
 
 class GraphGenerator:
+    
+    def is_neighbor(self, graph, *neighbors):
+        print(graph, neighbors)
+        for n1, n2 in neighbors:
+            graph[n1].append(n2)
+            graph[n2].append(n1)
 
-    def tree(self, n, subtype):
+    def tree(self, n):
         '''Generate a tree.'''
+        graph = defaultdict(list)
         for i in range(2**n-1):
-            n1, n2, n3 = str(i), str(2*i+1), str(2*i+2)
-            source = self.nf(name = n1, subtype = subtype)
-            destination = self.nf(name = n2, subtype = subtype)
-            yield source
-            yield destination
-            yield self.lf(source=source, destination=destination)
-            source = self.nf(name = n1, subtype = subtype)
-            destination = self.nf(name = n3, subtype = subtype)
-            yield source
-            yield destination
-            yield self.lf(source=source, destination=destination)
+            n1, n2, n3 = i, 2*i+1, 2*i+2
+            self.is_neighbor(graph, (n1, n2), (n1, n3))
+        return graph
 
     def star(self, n, subtype):
         '''Generate a star.'''
@@ -51,10 +49,9 @@ class GraphGenerator:
             yield source
             yield destination
             yield self.lf(source=source, destination=destination)
-                    
-    ## 5) Square tiling generation
-            
+
     def square_tiling(self, n, subtype):
+        '''Generate a square tiling'''
         for i in range(n**2):
             n1, n2, n3 = str(i), str(i-1), str(i+n)
             if i-1 > -1 and i%n:
@@ -69,10 +66,9 @@ class GraphGenerator:
                 yield source
                 yield destination
                 yield self.lf(source=source, destination=destination)
-                    
-    ## 6) Hypercube generation
-            
+
     def hypercube(self, n, subtype):
+        '''Generate a hypercube'''
         # we create a n-dim hypercube by connecting two (n-1)-dim hypercubes
         i = 0
         graph_nodes = [self.nf(name=str(0), subtype=subtype)]
@@ -108,10 +104,9 @@ class GraphGenerator:
             i += 1
         yield from graph_nodes
         yield from graph_plinks
-                    
-    ## 7) Generalized Kneser graph
-    
+
     def kneser(self, n, k, subtype):
+        '''Generate a Kneser graph'''
         # we keep track of what set we've seen to avoid having
         # duplicated edges in the graph, with the 'already_done' set
         already_done = set()
@@ -124,10 +119,9 @@ class GraphGenerator:
                     yield source
                     yield destination
                     yield self.lf(source=source, destination=destination)
-                            
-    ## 8) Generalized Petersen graph
-    
+
     def petersen(self, n, k, subtype):
+        '''Generate a Petersen graph'''
         # the petersen graph is made of the vertices (u_i) and (v_i) for 
         # i in [0, n-1] and the edges (u_i, u_i+1), (u_i, v_i) and (v_i, v_i+k).
         # to build it, we consider that v_i = u_(i+n).

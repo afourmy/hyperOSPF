@@ -9,6 +9,7 @@ if path_app not in sys.path:
     sys.path.append(path_app)
 
 from database import db, create_database
+from graph_generator import GraphGenerator
 from models import *
 
 hyperOSPF = Blueprint('hyperOSPF_app', __name__)
@@ -25,6 +26,12 @@ def index():
     return render_template('index.html')
 
 
+@hyperOSPF.route('/get_tree', methods=['POST'])
+def get_tree():
+    tree = generator.tree(5)
+    return jsonify(tree)
+
+
 def configure_database(app):
     create_database()
 
@@ -39,11 +46,15 @@ def create_app():
     app.config['SECRET_KEY'] = 'key'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.register_blueprint(hyperOSPF)
+    generator = GraphGenerator()
     configure_database(app)
     return app, generator
 
 
-app = create_app()
+app, generator = create_app()
+
+
+
 
 
 if __name__ == '__main__':
