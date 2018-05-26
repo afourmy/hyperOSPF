@@ -20,6 +20,7 @@
       type: "POST",
       url: "/get_tree",
       success: function(tree){
+        console.log(tree)
         var nodes = []
             links = [];
         for (const [key, value] of Object.entries(tree)) {
