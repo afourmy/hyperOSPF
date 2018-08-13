@@ -1,0 +1,27 @@
+{
+  "name": "Globewriter",
+  "version": "1.0.0",
+  "description": "A blog for globetrotters",
+  "scripts": {
+    "lint": "eslint ."
+  },
+  "engines": {
+    "node": "8.11.3"
+  },
+  "devDependencies": {
+    "eslint": "5.0.0",
+    "eslint-config-google": "0.9.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/afourmy/globewriter"
+  },
+  "keywords": [
+    "node"
+  ],
+  "author": "Antoine Fourmy",
+  "contributors": [
+    "Antoine fourmy <antoine.fourmy@gmail.com>"
+  ],
+  "license": "MIT"
+}

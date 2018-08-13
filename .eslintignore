@@ -1,0 +1,10 @@
+**/*.min.js
+globewriter/static/alertify
+globewriter/static/bootstrap
+globewriter/static/bootstrap-toggle
+globewriter/static/daterangepicker
+globewriter/static/jquery
+globewriter/static/leaflet
+globewriter/static/parsley
+globewriter/static/photoswipe
+globewriter/static/webgl-earth
