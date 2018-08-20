@@ -1,11 +1,12 @@
 FROM python:3.6
 
-ENV FLASK_APP hyperOSPF.py
+ENV FLASK_APP app.py
 
-COPY hyperOSPF.py gunicorn_config.py requirements.txt ./
-COPY app app
+COPY app.py gunicorn.py requirements.txt ./
+COPY hyperOSPF hyperOSPF
+COPY migrations migrations
 
 RUN pip install -r requirements.txt
 
 EXPOSE 5000
-CMD ["gunicorn", "--config", "gunicorn.py", "hyperOSPF:app"]
+CMD ["gunicorn", "--config", "gunicorn.py", "app:app"]
