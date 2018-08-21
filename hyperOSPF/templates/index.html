@@ -82,7 +82,19 @@
       }
     })
 
+$('.dropdown-submenu a.menu-submenu').on('click', function(e) {
+  $(this).next('ul').toggle();
+  e.stopPropagation();
+  e.preventDefault();
+});
 
+$('body').contextMenu({
+  menuSelector: '#contextMenu',
+  menuSelected: function(invokedOn, selectedMenu) {
+    let row = selectedMenu.text();
+    action[row]();
+  },
+});
 
 
   </script>
